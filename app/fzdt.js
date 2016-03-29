@@ -7,60 +7,36 @@ import FzdtThemeData from './storage/FzdtThemeData.js';
 import HeaderFzdt from './storage/HeaderFzdt.js';
 import Process  from './api/process.js';
 import Search  from './api/Search.js';
-
+import RequestData from './storage/RequestData.js';
 var Fzdt = React.createClass({
 	getInitialState: function(){
-		let that = this;
-		let process = new Process({
-			"url":"http://www.myflfw.com/law/App/Law/getLawNews.action",
-			options:{
-				"name":"fzdt_list",
-				"menuid":1,
-				"offset":"0",
-				"limit":"20"
-			},
-			headers:{},
-			callback:function(data){
-				data = JSON.parse(data.slice(0,-1).slice("fzdt_list".length+1));
-				that.setState({
-					fzdt_list: data.results
-				});
-			}
-		});
-		process.push();
+		var that=this;
+		setTimeout(function(){
+			that.setState({	
+				shijianbianliang:that.state.shijianbianliang+1,
+			})
+		},1000*5)
 		return {
 			num:0,
-			fzdt_list : []
+			fzdt_list : [],
+			shijianbianliang:0,
+			datasum:RequestData[0],
+			newstateflfw:0
 		};
 		
 	},
 	onfzdtListData : function(newState){
-		this.setState({
-			num:newState,
-		});
 		let that = this;
-		let process = new Process({
-			"url":"http://www.myflfw.com/law/App/Law/getLawNews.action",
-			options:{
-				"name":"fzdt_list",
-				"menuid":newState+1,
-				"offset":"0",
-				"limit":"20"
-			},
-			headers:{},
-			callback:function(data){
-				data = JSON.parse(data.slice(0,-1).slice("fzdt_list".length+1));
-				that.setState({
-					fzdt_list: data.results
-				});
-
-			}
+		this.setState({
+			datasum:RequestData[0],
+			newstateflfw:newState
 		});
-		process.push();
 	},
 	onserach : function(newState){
+		let arrr=[newState];
 		this.setState({
-			fzdt_list: newState
+			datasum:arrr,
+			newstateflfw:0,
 		});
 	},
 	render: function() {
@@ -68,8 +44,12 @@ var Fzdt = React.createClass({
 			<div>
 				<Header {...HeaderFzdt} />
 				<Search callbackSearch={this.onserach} url="http://www.myflfw.com/law/App/Law/searchLawsNews.action" />
-				<LawBarCPT data={FzdtThemeData} callbackParent={this.onfzdtListData} yanzheng={"fzdt"} />
-				<LawListCPT arrnum={this.state.fzdt_list} yanzheng={"fzdt"} />
+				<div className="lawbarleft">
+					<LawBarCPT data={FzdtThemeData} callbackParent={this.onfzdtListData} yanzheng={"fzdt"} />
+				</div>
+				<div className="lawlistright">
+					<LawListCPT arrnum={this.state.datasum} yanzheng={"fzdt"} newstateflfwp={this.state.newstateflfw} />
+				</div>
 				<NavBarCPT index="法治动态" />
 			</div>
 		);

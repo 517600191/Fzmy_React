@@ -7,73 +7,49 @@ import PfwhThemeData from './storage/PfwhThemeData.js';
 import HeaderPfwh from './storage/HeaderPfwh.js';
 import Process  from './api/process.js';
 import Search  from './api/Search.js';
-
+import RequestData from './storage/RequestData.js';
 var Pfwh = React.createClass({
 	getInitialState: function(){
-		let that = this;
-		let process = new Process({
-			"url":"http://www.myflfw.com/law/App/mediaMa/AppMediaList.action",
-			options:{
-				"name":"pfwh_list",
-				"menuid":1,
-				"offset":"0",
-				"limit":"20"
-			},
-			headers:{},
-			callback:function(data){
-				data = JSON.parse(data.slice(0,-1).slice("pfwh_list".length+1));	
-				that.setState({
-					pfwh_list: data.results
-				});
-			}
-		});
-		process.push();
+		var that=this;
+		setTimeout(function(){
+			that.setState({	
+				shijianbianliang:that.state.shijianbianliang+1,
+			})
+		},1000*5)
 		return {
 			num:0,
 			pfwh_list : [],
+			shijianbianliang:0,
+			datasum:RequestData[1],
+			newstateflfw:0
 		};
 	},
 	onpfwhListData : function(newState){
-		if(newState==3){
-			newState=4;
-		}else if(newState==4){
-			newState=5;
-		}
-		this.setState({
-			num:newState,
-		});
 		let that = this;
-		let process = new Process({
-
-			"url":"http://www.myflfw.com/law/App/mediaMa/AppMediaList.action",
-			options:{
-				"name":"pfwh_list",
-				"menuid":newState+1,
-				"offset":"0",
-				"limit":"20"
-			},
-			headers:{},
-			callback:function(data){
-				data = JSON.parse(data.slice(0,-1).slice("pfwh_list".length+1));
-				that.setState({
-					pfwh_list: data.results
-				});
-			}
+		this.setState({
+			datasum:RequestData[1],
+			newstateflfw:newState
 		});
-		process.push();
 	},
 	onserach : function(newState){
+		let arrr=[newState];
 		this.setState({
-			pfwh_list: newState
+			datasum:arrr,
+			newstateflfw:0,
 		});
 	},
 	render: function() {	
+		console.log(this.state.datasum);
 		return (
 			<div>
 				<Header {...HeaderPfwh} />
 				<Search callbackSearch={this.onserach} url="http://www.myflfw.com/law/App/mediaMa/AppSearchMediaByTitle.action" />
-				<LawBarCPT data={PfwhThemeData} callbackParent={this.onpfwhListData} yanzheng={"pfwh"} />
-				<LawListCPT arrnum={this.state.pfwh_list} yanzheng={"pfwh"} />
+				<div className="lawbarleft">
+					<LawBarCPT data={PfwhThemeData} callbackParent={this.onpfwhListData} yanzheng={"pfwh"} />
+				</div>
+				<div className="lawlistright">
+					<LawListCPT arrnum={this.state.datasum} yanzheng={"pfwh"} newstateflfwp={this.state.newstateflfw} />
+				</div>
 				<NavBarCPT index="普法文化" />
 			</div>
 		);
