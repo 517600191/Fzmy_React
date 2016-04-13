@@ -18,7 +18,6 @@ const HeaderData = {
   },
   onSelect: function(nav, e) {
     e.preventDefault();
-    console.log('你点击了', nav,e.target);
     let router = this._reactInternalInstance._context.router;
     router.replace(nav.link);
   }

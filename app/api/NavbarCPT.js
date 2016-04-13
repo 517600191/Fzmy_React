@@ -13,7 +13,7 @@ class NavbarCPT extends React.Component{
 		return (<Navbar onSelect={(link,history,e) => {
 			e.preventDefault();
 			router.replace(link)
-		}} data={NavData} theme={null}   index={this.props.index} />);
+		}} data={NavData} theme={null} style={{background:"white"}} index={this.props.index} />);
 	}
 }
 /*

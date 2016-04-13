@@ -1,4 +1,4 @@
-# Fzmy_React
+﻿# Fzmy_React
 法治绵阳React改版项目
 #基础功能构建   3.16
 
@@ -16,7 +16,7 @@
 	3.查菜单列表(法制动态)
 		url: /law/App/Law/getLawMenus.action
 		参数传递:无
-
+ 
 	4.查新闻列表
 		url: /law/App/Law/getLawNews.action
 		参数传递: limit,offset,menuid,
@@ -28,13 +28,17 @@
 	6.查菜单列表(法律服务)
 		url: /law/App/Ser/getServiceMenus.action
 		参数传递:无
-	
+
+	#plus 查人员列表
+
+		http://www.myflfw.com/law/App/Ser/getServiceStaffs.action
+
 	7.查人员详情
 		url: /law/App/Ser/getServiceStaffDet.action
 		参数传递:id
 	
 	12.查机构列表
-		url: /law/App/Ser/getOrgs.action
+		url: 			
 		参数传递：limit，offset，menuid，tagid
 	
 	8.查机构详情
